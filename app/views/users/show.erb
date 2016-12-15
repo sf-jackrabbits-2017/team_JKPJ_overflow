@@ -1,0 +1,13 @@
+<br>
+<div class="detail">
+<% if current_user %>
+  <div class="user-header">
+    <center><p>Welcome back, <%= current_user.first_name %></p></  center>
+    <center><a href="/">Unsubscribe/subscribe to channels</a></center>
+  </div>
+  <br>
+  </div>
+<% else %>
+  <a href="/">Please login or register</a>
+<% end %>
+</div>
