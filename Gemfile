@@ -15,6 +15,7 @@ gem 'pry'
 gem 'bcrypt'
 
 gem 'shotgun', '~>0.9.1'
+gem 'hirb'
 
 group :test do
   gem 'shoulda-matchers'

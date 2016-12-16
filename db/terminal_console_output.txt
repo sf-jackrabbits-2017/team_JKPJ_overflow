@@ -1,0 +1,234 @@
+irb(main):001:0> Hirb.enable
+=> true
+irb(main):002:0> katie=User.new(username:'katie',password:'puppies',email:'katie@katie.com')
++----+----------+------------------+-----------------+------------+------------+
+| id | username | password_hash    | email           | created_at | updated_at |
++----+----------+------------------+-----------------+------------+------------+
+|    | katie    | $2a$10$vO5y7j... | katie@katie.com |            |            |
++----+----------+------------------+-----------------+------------+------------+
+1 row in set
+irb(main):003:0> katie.users
+NoMethodError: undefined method `users' for #<User:0x0055af7af885e8>
+Did you mean?  username
+	from /home/jin/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/activemodel-4.2.0/lib/active_model/attribute_methods.rb:433:in `method_missing'
+	from (irb):3
+	from /home/jin/.rbenv/versions/2.3.1/bin/irb:11:in `<main>'
+irb(main):004:0> katie.questions
+=> #<ActiveRecord::Associations::CollectionProxy []>
+irb(main):005:0> katie.answers
+=> #<ActiveRecord::Associations::CollectionProxy []>
+irb(main):006:0> katie.votes
+=> #<ActiveRecord::Associations::CollectionProxy []>
+irb(main):007:0> katie.comments
+=> #<ActiveRecord::Associations::CollectionProxy []>
+irb(main):008:0> Katie.comments.create(c_contents:'first')
+NameError: uninitialized constant Katie
+	from (irb):8
+	from /home/jin/.rbenv/versions/2.3.1/bin/irb:11:in `<main>'
+irb(main):009:0> katie.comments.create(c_content:'first')
+ActiveRecord::RecordNotSaved: You cannot call create unless the parent is saved
+	from /home/jin/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/activerecord-4.2.0/lib/active_record/associations/collection_association.rb:482:in `_create_record'
+	from /home/jin/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/activerecord-4.2.0/lib/active_record/associations/has_many_association.rb:172:in `_create_record'
+	from /home/jin/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/activerecord-4.2.0/lib/active_record/associations/collection_association.rb:143:in `create'
+	from /home/jin/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/activerecord-4.2.0/lib/active_record/associations/collection_proxy.rb:285:in `create'
+	from (irb):9
+	from /home/jin/.rbenv/versions/2.3.1/bin/irb:11:in `<main>'
+irb(main):010:0> katie.save
+D, [2016-12-15T15:50:14.369803 #15837] DEBUG -- :    (0.5ms)  BEGIN
+D, [2016-12-15T15:50:14.396989 #15837] DEBUG -- :   User Exists (2.2ms)  SELECT  1 AS one FROM "users" WHERE "users"."username" = 'katie' LIMIT 1
+D, [2016-12-15T15:50:14.398925 #15837] DEBUG -- :   User Exists (0.7ms)  SELECT  1 AS one FROM "users" WHERE "users"."email" = 'katie@katie.com' LIMIT 1
+D, [2016-12-15T15:50:14.403363 #15837] DEBUG -- :   SQL (0.8ms)  INSERT INTO "users" ("username", "password_hash", "email", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["username", "katie"], ["password_hash", "$2a$10$vO5y7jvITa6xpQ270J.3b.bnOt37mLqUQvwCdKrkEhshhsZ97B9aa"], ["email", "katie@katie.com"], ["created_at", "2016-12-15 23:50:14.399898"], ["updated_at", "2016-12-15 23:50:14.399898"]]
+D, [2016-12-15T15:50:14.464097 #15837] DEBUG -- :    (59.6ms)  COMMIT
+=> true
+irb(main):011:0> katie.comments.create(c_content:'first')
+D, [2016-12-15T15:50:20.156507 #15837] DEBUG -- :    (0.5ms)  BEGIN
+D, [2016-12-15T15:50:20.247595 #15837] DEBUG -- :   SQL (1.3ms)  INSERT INTO "comments" ("c_content", "user_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"  [["c_content", "first"], ["user_id", 1], ["created_at", "2016-12-15 23:50:20.243889"], ["updated_at", "2016-12-15 23:50:20.243889"]]
+D, [2016-12-15T15:50:20.260121 #15837] DEBUG -- :    (11.3ms)  COMMIT
++----+---------+-----------+------------+------------+------------+------------+
+| id | user_id | c_content | comment... | comment... | created_at | updated_at |
++----+---------+-----------+------------+------------+------------+------------+
+| 1  | 1       | first     |            |            | 2016-12... | 2016-12... |
++----+---------+-----------+------------+------------+------------+------------+
+1 row in set
+irb(main):012:0> katie.questions.comments.create(c_content:'first')
+NoMethodError: undefined method `comments' for #<ActiveRecord::Associations::CollectionProxy []>
+	from /home/jin/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/activerecord-4.2.0/lib/active_record/relation/delegation.rb:136:in `method_missing'
+	from /home/jin/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/activerecord-4.2.0/lib/active_record/relation/delegation.rb:99:in `method_missing'
+	from (irb):12
+	from /home/jin/.rbenv/versions/2.3.1/bin/irb:11:in `<main>'
+irb(main):013:0> q=katie.questions.create(q_content:'how big is the specific ocean')
+D, [2016-12-15T15:52:19.995355 #15837] DEBUG -- :    (0.5ms)  BEGIN
+D, [2016-12-15T15:52:20.013527 #15837] DEBUG -- :   SQL (1.0ms)  INSERT INTO "questions" ("q_content", "user_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"  [["q_content", "how big is the specific ocean"], ["user_id", 1], ["created_at", "2016-12-15 23:52:20.009625"], ["updated_at", "2016-12-15 23:52:20.009625"]]
+D, [2016-12-15T15:52:20.087974 #15837] DEBUG -- :    (73.6ms)  COMMIT
++----+----------------+---------+-------------+---------------+----------------+
+| id | q_content      | user_id | favorite_id | created_at    | updated_at     |
++----+----------------+---------+-------------+---------------+----------------+
+| 1  | how big is ... | 1       |             | 2016-12-15... | 2016-12-15 ... |
++----+----------------+---------+-------------+---------------+----------------+
+1 row in set
+irb(main):014:0> q.comments.create(c_content:'first')
+D, [2016-12-15T15:52:40.348965 #15837] DEBUG -- :    (0.6ms)  BEGIN
+D, [2016-12-15T15:52:40.354936 #15837] DEBUG -- :   SQL (0.8ms)  INSERT INTO "comments" ("c_content", "commentable_id", "commentable_type", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["c_content", "first"], ["commentable_id", 1], ["commentable_type", "Question"], ["created_at", "2016-12-15 23:52:40.351717"], ["updated_at", "2016-12-15 23:52:40.351717"]]
+D, [2016-12-15T15:52:40.417963 #15837] DEBUG -- :    (61.4ms)  COMMIT
++----+---------+-----------+------------+------------+------------+------------+
+| id | user_id | c_content | comment... | comment... | created_at | updated_at |
++----+---------+-----------+------------+------------+------------+------------+
+| 2  |         | first     | 1          | Question   | 2016-12... | 2016-12... |
++----+---------+-----------+------------+------------+------------+------------+
+1 row in set
+irb(main):015:0> q.comments
+D, [2016-12-15T15:52:45.827498 #15837] DEBUG -- :   Comment Load (1.0ms)  SELECT "comments".* FROM "comments" WHERE "comments"."commentable_id" = $1 AND "comments"."commentable_type" = $2  [["commentable_id", 1], ["commentable_type", "Question"]]
++----+---------+-----------+------------+------------+------------+------------+
+| id | user_id | c_content | comment... | comment... | created_at | updated_at |
++----+---------+-----------+------------+------------+------------+------------+
+| 2  |         | first     | 1          | Question   | 2016-12... | 2016-12... |
++----+---------+-----------+------------+------------+------------+------------+
+1 row in set
+irb(main):016:0> jin=User.create(username:'jin',password:'jinspw',email:'jin@jin.com')
+D, [2016-12-15T15:53:55.310951 #15837] DEBUG -- :    (0.3ms)  BEGIN
+D, [2016-12-15T15:53:55.312551 #15837] DEBUG -- :   User Exists (0.7ms)  SELECT  1 AS one FROM "users" WHERE "users"."username" = 'jin' LIMIT 1
+D, [2016-12-15T15:53:55.313572 #15837] DEBUG -- :   User Exists (0.5ms)  SELECT  1 AS one FROM "users" WHERE "users"."email" = 'jin@jin.com' LIMIT 1
+D, [2016-12-15T15:53:55.315040 #15837] DEBUG -- :   SQL (0.6ms)  INSERT INTO "users" ("username", "password_hash", "email", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["username", "jin"], ["password_hash", "$2a$10$Yd9lve.mTuXsYjoMHkBbUORh5rVtT3xiV4sWxpgp9iZpUgXN4r4nG"], ["email", "jin@jin.com"], ["created_at", "2016-12-15 23:53:55.313754"], ["updated_at", "2016-12-15 23:53:55.313754"]]
+D, [2016-12-15T15:53:55.377440 #15837] DEBUG -- :    (61.8ms)  COMMIT
++----+----------+---------------+-------------+---------------+----------------+
+| id | username | password_hash | email       | created_at    | updated_at     |
++----+----------+---------------+-------------+---------------+----------------+
+| 2  | jin      | $2a$10$Yd9... | jin@jin.com | 2016-12-15... | 2016-12-15 ... |
++----+----------+---------------+-------------+---------------+----------------+
+1 row in set
+irb(main):017:0> jin.questions.create(q_content:'hai guys whats up')
+D, [2016-12-15T15:55:12.848764 #15837] DEBUG -- :    (0.5ms)  BEGIN
+D, [2016-12-15T15:55:12.854649 #15837] DEBUG -- :   SQL (0.8ms)  INSERT INTO "questions" ("q_content", "user_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4) RETURNING "id"  [["q_content", "hai guys whats up"], ["user_id", 2], ["created_at", "2016-12-15 23:55:12.852051"], ["updated_at", "2016-12-15 23:55:12.852051"]]
+D, [2016-12-15T15:55:12.914433 #15837] DEBUG -- :    (58.5ms)  COMMIT
++----+----------------+---------+-------------+---------------+----------------+
+| id | q_content      | user_id | favorite_id | created_at    | updated_at     |
++----+----------------+---------+-------------+---------------+----------------+
+| 2  | hai guys wh... | 2       |             | 2016-12-15... | 2016-12-15 ... |
++----+----------------+---------+-------------+---------------+----------------+
+1 row in set
+irb(main):018:0> jin.questions
+D, [2016-12-15T15:55:16.981513 #15837] DEBUG -- :   Question Load (0.9ms)  SELECT "questions".* FROM "questions" WHERE "questions"."user_id" = $1  [["user_id", 2]]
++----+----------------+---------+-------------+---------------+----------------+
+| id | q_content      | user_id | favorite_id | created_at    | updated_at     |
++----+----------------+---------+-------------+---------------+----------------+
+| 2  | hai guys wh... | 2       |             | 2016-12-15... | 2016-12-15 ... |
++----+----------------+---------+-------------+---------------+----------------+
+1 row in set
+irb(main):019:0> User.all
+D, [2016-12-15T15:56:15.807486 #15837] DEBUG -- :   User Load (1.1ms)  SELECT "users".* FROM "users"
++----+----------+---------------+---------------+--------------+---------------+
+| id | username | password_hash | email         | created_at   | updated_at    |
++----+----------+---------------+---------------+--------------+---------------+
+| 1  | katie    | $2a$10$vO5... | katie@kati... | 2016-12-1... | 2016-12-15... |
+| 2  | jin      | $2a$10$Yd9... | jin@jin.com   | 2016-12-1... | 2016-12-15... |
++----+----------+---------------+---------------+--------------+---------------+
+2 rows in set
+irb(main):020:0> q.answers.create(a_content:'can u b more pacific?',user_id:2)
+D, [2016-12-15T15:58:25.376459 #15837] DEBUG -- :    (0.5ms)  BEGIN
+D, [2016-12-15T15:58:25.402017 #15837] DEBUG -- :   SQL (1.4ms)  INSERT INTO "answers" ("a_content", "user_id", "question_id", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5) RETURNING "id"  [["a_content", "can u b more pacific?"], ["user_id", 2], ["question_id", 1], ["created_at", "2016-12-15 23:58:25.398174"], ["updated_at", "2016-12-15 23:58:25.398174"]]
+D, [2016-12-15T15:58:25.463342 #15837] DEBUG -- :    (59.7ms)  COMMIT
++----+---------------+---------+-------------+----------------+----------------+
+| id | a_content     | user_id | question_id | created_at     | updated_at     |
++----+---------------+---------+-------------+----------------+----------------+
+| 1  | can u b mo... | 2       | 1           | 2016-12-15 ... | 2016-12-15 ... |
++----+---------------+---------+-------------+----------------+----------------+
+1 row in set
+irb(main):021:0> ans=q.answers.first
+D, [2016-12-15T15:59:34.902712 #15837] DEBUG -- :   Answer Load (1.0ms)  SELECT  "answers".* FROM "answers" WHERE "answers"."question_id" = $1  ORDER BY "answers"."id" ASC LIMIT 1  [["question_id", 1]]
++----+---------------+---------+-------------+----------------+----------------+
+| id | a_content     | user_id | question_id | created_at     | updated_at     |
++----+---------------+---------+-------------+----------------+----------------+
+| 1  | can u b mo... | 2       | 1           | 2016-12-15 ... | 2016-12-15 ... |
++----+---------------+---------+-------------+----------------+----------------+
+1 row in set
+irb(main):022:0> comm=and.comments.create(c_content:'lolz',user_id:1)
+SyntaxError: (irb):22: syntax error, unexpected keyword_and
+comm=and.comments.create(c_content:'lolz',user_id:1)
+        ^
+	from /home/jin/.rbenv/versions/2.3.1/bin/irb:11:in `<main>'
+irb(main):023:0> comm=ans.comments.create(c_content:'lolz',user_id:1)
+D, [2016-12-15T16:00:28.814586 #15837] DEBUG -- :    (0.6ms)  BEGIN
+D, [2016-12-15T16:00:28.819971 #15837] DEBUG -- :   SQL (0.8ms)  INSERT INTO "comments" ("c_content", "user_id", "commentable_id", "commentable_type", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"  [["c_content", "lolz"], ["user_id", 1], ["commentable_id", 1], ["commentable_type", "Answer"], ["created_at", "2016-12-16 00:00:28.817094"], ["updated_at", "2016-12-16 00:00:28.817094"]]
+D, [2016-12-15T16:00:28.887473 #15837] DEBUG -- :    (66.4ms)  COMMIT
++----+---------+-----------+------------+------------+------------+------------+
+| id | user_id | c_content | comment... | comment... | created_at | updated_at |
++----+---------+-----------+------------+------------+------------+------------+
+| 3  | 1       | lolz      | 1          | Answer     | 2016-12... | 2016-12... |
++----+---------+-----------+------------+------------+------------+------------+
+1 row in set
+irb(main):024:0> q.comments
++----+---------+-----------+------------+------------+------------+------------+
+| id | user_id | c_content | comment... | comment... | created_at | updated_at |
++----+---------+-----------+------------+------------+------------+------------+
+| 2  |         | first     | 1          | Question   | 2016-12... | 2016-12... |
++----+---------+-----------+------------+------------+------------+------------+
+1 row in set
+irb(main):025:0> q.answers
+D, [2016-12-15T16:00:44.689660 #15837] DEBUG -- :   Answer Load (1.2ms)  SELECT "answers".* FROM "answers" WHERE "answers"."question_id" = $1  [["question_id", 1]]
++----+---------------+---------+-------------+----------------+----------------+
+| id | a_content     | user_id | question_id | created_at     | updated_at     |
++----+---------------+---------+-------------+----------------+----------------+
+| 1  | can u b mo... | 2       | 1           | 2016-12-15 ... | 2016-12-15 ... |
++----+---------------+---------+-------------+----------------+----------------+
+1 row in set
+irb(main):026:0> q.answers.comments
+NoMethodError: undefined method `comments' for #<Answer::ActiveRecord_Associations_CollectionProxy:0x0055af797b59e8>
+	from /home/jin/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/activerecord-4.2.0/lib/active_record/relation/delegation.rb:136:in `method_missing'
+	from /home/jin/.rbenv/versions/2.3.1/lib/ruby/gems/2.3.0/gems/activerecord-4.2.0/lib/active_record/relation/delegation.rb:99:in `method_missing'
+	from (irb):26
+	from /home/jin/.rbenv/versions/2.3.1/bin/irb:11:in `<main>'
+irb(main):027:0> ans.comments
+D, [2016-12-15T16:00:59.955725 #15837] DEBUG -- :   Comment Load (1.1ms)  SELECT "comments".* FROM "comments" WHERE "comments"."commentable_id" = $1 AND "comments"."commentable_type" = $2  [["commentable_id", 1], ["commentable_type", "Answer"]]
++----+---------+-----------+------------+------------+------------+------------+
+| id | user_id | c_content | comment... | comment... | created_at | updated_at |
++----+---------+-----------+------------+------------+------------+------------+
+| 3  | 1       | lolz      | 1          | Answer     | 2016-12... | 2016-12... |
++----+---------+-----------+------------+------------+------------+------------+
+1 row in set
+irb(main):028:0> ans.votes.create(user_id:'1',value:1)
+D, [2016-12-15T16:04:25.753528 #15837] DEBUG -- :    (0.9ms)  BEGIN
+D, [2016-12-15T16:04:25.772985 #15837] DEBUG -- :   SQL (1.2ms)  INSERT INTO "votes" ("user_id", "value", "voteable_id", "voteable_type", "created_at", "updated_at") VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id"  [["user_id", 1], ["value", 1], ["voteable_id", 1], ["voteable_type", "Answer"], ["created_at", "2016-12-16 00:04:25.768084"], ["updated_at", "2016-12-16 00:04:25.768084"]]
+D, [2016-12-15T16:04:26.064536 #15837] DEBUG -- :    (290.3ms)  COMMIT
++----+---------+-------+-------------+-------------+-------------+-------------+
+| id | user_id | value | voteable_id | voteable... | created_at  | updated_at  |
++----+---------+-------+-------------+-------------+-------------+-------------+
+| 1  | 1       | 1     | 1           | Answer      | 2016-12-... | 2016-12-... |
++----+---------+-------+-------------+-------------+-------------+-------------+
+1 row in set
+irb(main):029:0> User.all
+D, [2016-12-15T16:05:01.826674 #15837] DEBUG -- :   User Load (1.0ms)  SELECT "users".* FROM "users"
++----+----------+---------------+---------------+--------------+---------------+
+| id | username | password_hash | email         | created_at   | updated_at    |
++----+----------+---------------+---------------+--------------+---------------+
+| 1  | katie    | $2a$10$vO5... | katie@kati... | 2016-12-1... | 2016-12-15... |
+| 2  | jin      | $2a$10$Yd9... | jin@jin.com   | 2016-12-1... | 2016-12-15... |
++----+----------+---------------+---------------+--------------+---------------+
+2 rows in set
+irb(main):030:0> Question.all
+D, [2016-12-15T16:05:07.403164 #15837] DEBUG -- :   Question Load (1.0ms)  SELECT "questions".* FROM "questions"
++----+----------------+---------+-------------+---------------+----------------+
+| id | q_content      | user_id | favorite_id | created_at    | updated_at     |
++----+----------------+---------+-------------+---------------+----------------+
+| 1  | how big is ... | 1       |             | 2016-12-15... | 2016-12-15 ... |
+| 2  | hai guys wh... | 2       |             | 2016-12-15... | 2016-12-15 ... |
++----+----------------+---------+-------------+---------------+----------------+
+2 rows in set
+irb(main):031:0> Answer.all
+D, [2016-12-15T16:06:20.840789 #15837] DEBUG -- :   Answer Load (0.9ms)  SELECT "answers".* FROM "answers"
++----+---------------+---------+-------------+----------------+----------------+
+| id | a_content     | user_id | question_id | created_at     | updated_at     |
++----+---------------+---------+-------------+----------------+----------------+
+| 1  | can u b mo... | 2       | 1           | 2016-12-15 ... | 2016-12-15 ... |
++----+---------------+---------+-------------+----------------+----------------+
+1 row in set
+irb(main):032:0> Comment.all
+D, [2016-12-15T16:06:26.936055 #15837] DEBUG -- :   Comment Load (1.1ms)  SELECT "comments".* FROM "comments"
++----+---------+-----------+------------+------------+------------+------------+
+| id | user_id | c_content | comment... | comment... | created_at | updated_at |
++----+---------+-----------+------------+------------+------------+------------+
+| 1  | 1       | first     |            |            | 2016-12... | 2016-12... |
+| 2  |         | first     | 1          | Question   | 2016-12... | 2016-12... |
+| 3  | 1       | lolz      | 1          | Answer     | 2016-12... | 2016-12... |
++----+---------+-----------+------------+------------+------------+------------+
+3 rows in set
+irb(main):033:0> 
