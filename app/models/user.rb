@@ -3,6 +3,11 @@ class User < ActiveRecord::Base
   validates :username, :email, uniqueness: true
   validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on => :create
 
+  has_many :questions
+  has_many :answers
+  has_many :votes
+  has_many :comments
+
   include BCrypt
 
   def password
@@ -15,7 +20,7 @@ class User < ActiveRecord::Base
   end
 
   def authenticate(plain_password)
-  self.password == plain_password
+    self.password == plain_password
   end
 
 end

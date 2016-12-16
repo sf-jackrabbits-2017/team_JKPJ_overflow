@@ -17,6 +17,7 @@ require 'logger'
 require 'bcrypt'
 require 'sinatra'
 require "sinatra/reloader" if development?
+require 'hirb'
 
 require 'erb'
 
