@@ -18,6 +18,7 @@ require 'bcrypt'
 require 'sinatra'
 require "sinatra/reloader" if development?
 require 'hirb'
+require 'faker'
 
 require 'erb'
 
